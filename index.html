@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FNB Fleet Cards Record</title>
+<meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0f172a;
+  --navy-800: #1e293b;
+  --navy-700: #334155;
+  --navy-600: #475569;
+  --navy-400: #94a3b8;
+  --navy-200: #e2e8f0;
+  --navy-100: #f1f5f9;
+  --navy-50: #f8fafc;
+  --gold: #f59e0b;
+  --gold-light: #fef3c7;
+  --gold-dark: #b45309;
+  --emerald: #10b981;
+  --emerald-light: #d1fae5;
+  --emerald-dark: #065f46;
+  --rose: #f43f5e;
+  --rose-light: #ffe4e6;
+  --rose-dark: #9f1239;
+  --blue: #3b82f6;
+  --blue-light: #dbeafe;
+  --blue-dark: #1d4ed8;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --radius-lg: 20px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 6px rgba(0,0,0,0.05), 0 16px 48px rgba(0,0,0,0.12);
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  color: var(--navy);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(59,130,246,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(245,158,11,0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layout */
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  position: relative;
+  z-index: 1;
+}
+
+/* Mobile overlay for sidebar */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.6);
+  z-index: 99;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--navy-800);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: -webkit-fill-available;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: transform 0.3s ease;
+  z-index: 100;
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy-600) transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--navy-600); border-radius: 2px; }
+
+.brand {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--gold), #ef4444);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.brand h1 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.brand p {
+  font-size: 11px;
+  color: var(--navy-400);
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--navy-600);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 0 24px 8px;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  cursor: pointer;
+  border-radius: 0;
+  transition: all 0.15s;
+  color: var(--navy-400);
+  font-size: 14px;
+  font-weight: 400;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  min-height: 44px;
+}
+
+.nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.nav-item:active { background: rgba(255,255,255,0.1); }
+.nav-item.active { color: #fff; background: rgba(245,158,11,0.12); }
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  background: var(--gold);
+  border-radius: 0 3px 3px 0;
+}
+
+.nav-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-item.active .nav-icon { background: rgba(245,158,11,0.2); }
+
+/* Badge */
+.nav-badge {
+  margin-left: auto;
+  background: var(--rose);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 20px 24px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+  padding-bottom: calc(20px + var(--safe-bottom));
+}
+
+.sidebar-footer .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--emerald);
+  display: inline-block;
+  margin-right: 6px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.sidebar-footer p {
+  font-size: 11px;
+  color: var(--navy-400);
+}
+
+/* Mobile sidebar toggle */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: calc(16px + var(--safe-top));
+  left: calc(16px + var(--safe-left));
+  z-index: 101;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--navy-800);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.2s ease;
+}
+
+.sidebar-toggle:active { transform: scale(0.95); }
+
+/* Main Content */
+.main {
+  background: var(--navy-50);
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+.topbar {
+  background: #fff;
+  border-bottom: 1px solid var(--navy-200);
+  padding: 0 24px;
+  padding-left: calc(24px + var(--safe-left));
+  padding-right: calc(24px + var(--safe-right));
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding-top: var(--safe-top);
+}
+
+.topbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+  text-decoration: none;
+  min-height: 40px;
+  min-width: 40px;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--navy-600);
+  border: 1px solid var(--navy-200);
+}
+
+.btn-ghost:hover { background: var(--navy-100); color: var(--navy); border-color: var(--navy-400); }
+.btn-ghost:active { background: var(--navy-200); }
+
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.btn-primary:hover { background: var(--gold-dark); color: #fff; }
+.btn-primary:active { background: var(--gold-dark); }
+
+.btn-danger {
+  background: var(--rose-light);
+  color: var(--rose-dark);
+}
+
+.btn-danger:hover { background: var(--rose); color: #fff; }
+
+.btn-success {
+  background: var(--emerald-light);
+  color: var(--emerald-dark);
+}
+
+.btn-success:hover { background: var(--emerald); color: #fff; }
+
+.btn-sm { padding: 8px 14px; font-size: 12px; min-height: 36px; }
+
+/* Content panels */
+.panel {
+  display: none;
+  padding: 24px;
+  padding-top: calc(24px + var(--safe-top));
+  padding-bottom: calc(24px + var(--safe-bottom));
+  padding-left: calc(24px + var(--safe-left));
+  padding-right: calc(24px + var(--safe-right));
+}
+
+.panel.active { display: block; }
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 16px;
+  border: 1px solid var(--navy-200);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  opacity: 0.06;
+}
+
+.stat-card.gold::before { background: var(--gold); }
+.stat-card.emerald::before { background: var(--emerald); }
+.stat-card.rose::before { background: var(--rose); }
+.stat-card.blue::before { background: var(--blue); }
+
+.stat-icon {
+  font-size: 18px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--navy);
+  letter-spacing: -1px;
+  font-family: 'DM Mono', monospace;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--navy-400);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.stat-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 20px;
+  margin-top: 6px;
+}
+
+.stat-change.up { background: var(--emerald-light); color: var(--emerald-dark); }
+.stat-change.neutral { background: var(--navy-100); color: var(--navy-600); }
+
+/* Content Card */
+.card {
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid var(--navy-200);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--navy-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-body { padding: 20px; }
+
+/* Form Styles */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.form-row.one { grid-template-columns: 1fr; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+.form-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--navy-600);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 14px;
+  border: 1.5px solid var(--navy-200);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--navy);
+  background: var(--navy-50);
+  transition: all 0.15s;
+  outline: none;
+  width: 100%;
+  min-height: 44px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+}
+
+.form-group input[readonly] {
+  color: var(--navy-400);
+  cursor: default;
+  background: var(--navy-100);
+}
+
+.form-group textarea { resize: vertical; min-height: 90px; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--navy-100);
+  flex-wrap: wrap;
+}
+
+/* Table */
+.table-wrapper { 
+  overflow-x: auto; 
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -20px;
+  padding: 0 20px;
+}
+
+.table-wrapper::-webkit-scrollbar { height: 4px; }
+.table-wrapper::-webkit-scrollbar-track { background: var(--navy-100); border-radius: 2px; }
+.table-wrapper::-webkit-scrollbar-thumb { background: var(--navy-400); border-radius: 2px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 600px;
+}
+
+thead tr {
+  background: var(--navy-50);
+  border-bottom: 2px solid var(--navy-200);
+}
+
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--navy-400);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--navy-50);
+  z-index: 1;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--navy-100);
+  transition: background 0.1s;
+}
+
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--navy-50); }
+tbody tr:active { background: var(--navy-100); }
+
+tbody td {
+  padding: 14px 16px;
+  color: var(--navy);
+  vertical-align: middle;
+  max-width: 200px;
+}
+
+.cell-reg {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy);
+  background: var(--navy-100);
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cell-driver {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 140px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.avatar-gold { background: var(--gold-light); color: var(--gold-dark); }
+.avatar-blue { background: var(--blue-light); color: var(--blue-dark); }
+.avatar-emerald { background: var(--emerald-light); color: var(--emerald-dark); }
+.avatar-rose { background: var(--rose-light); color: var(--rose-dark); }
+
+.driver-name { 
+  font-weight: 500; 
+  font-size: 14px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.badge-out { background: var(--rose-light); color: var(--rose-dark); }
+.badge-out::before { background: var(--rose); }
+.badge-in { background: var(--emerald-light); color: var(--emerald-dark); }
+.badge-in::before { background: var(--emerald); }
+.badge-fuel { background: var(--gold-light); color: var(--gold-dark); }
+.badge-fuel::before { background: var(--gold); }
+
+/* Empty State */
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--navy-400);
+}
+
+.empty-state .empty-icon { font-size: 36px; margin-bottom: 12px; opacity: 0.5; }
+.empty-state p { font-size: 14px; }
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: calc(20px + var(--safe-bottom));
+  right: calc(20px + var(--safe-right));
+  left: calc(20px + var(--safe-left));
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--navy-800);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+  border-left: 3px solid var(--gold);
+  pointer-events: auto;
+  max-width: 100%;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.toast.success { border-left-color: var(--emerald); }
+.toast.error { border-left-color: var(--rose); }
+
+@keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateY(10px); } }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.75);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  padding: 20px;
+  padding-top: calc(20px + var(--safe-top));
+  padding-bottom: calc(20px + var(--safe-bottom));
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+  animation: popIn 0.2s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: var(--navy-400);
+  margin-bottom: 20px;
+}
+
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.modal-actions .btn { flex: 1; min-width: 120px; justify-content: center; }
+
+.error-msg {
+  background: var(--rose-light);
+  color: var(--rose-dark);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+  display: none;
+}
+
+.error-msg.show { display: block; }
+
+/* Duration pill */
+.duration-pill {
+  font-size: 11px;
+  color: var(--navy-400);
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+}
+
+/* Trip notes badge */
+.notes-tag {
+  display: inline-block;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  color: var(--navy-600);
+  background: var(--navy-100);
+  padding: 3px 10px;
+  border-radius: 5px;
+  cursor: default;
+  vertical-align: middle;
+}
+
+/* Tab strip */
+.tab-strip {
+  display: flex;
+  gap: 4px;
+  background: var(--navy-100);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  width: fit-content;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-strip::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--navy-400);
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  white-space: nowrap;
+  min-height: 36px;
+}
+
+.tab-btn:active { transform: scale(0.98); }
+.tab-btn.active {
+  background: #fff;
+  color: var(--navy);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Alert bar */
+.alert-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: #92400e;
+  margin-bottom: 20px;
+}
+
+.alert-bar.show { display: flex; }
+
+/* Action row for table */
+.action-cell { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* Checkin Preview */
+#checkinPreview {
+  background: var(--navy-50);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  border: 1px solid var(--navy-200);
+  margin-bottom: 16px;
+}
+
+/* Search input */
+.search-input {
+  padding: 8px 12px;
+  font-size: 13px;
+  border: 1px solid var(--navy-200);
+  border-radius: var(--radius-sm);
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+  max-width: 200px;
+  min-height: 36px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    height: -webkit-fill-available;
+    transform: translateX(-100%);
+    width: 280px;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-toggle {
+    display: flex;
+  }
+  
+  .topbar {
+    padding-left: calc(70px + var(--safe-left));
+  }
+  
+  .topbar-title {
+    max-width: 50%;
+  }
+  
+  .panel {
+    padding: 16px;
+    padding-top: calc(16px + var(--safe-top));
+    padding-bottom: calc(16px + var(--safe-bottom));
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .card-header > div:last-child {
+    width: 100%;
+  }
+  
+  .search-input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --radius: 12px;
+    --radius-sm: 6px;
+    --radius-lg: 16px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+  }
+  
+  .stat-card {
+    padding: 18px;
+  }
+  
+  .topbar {
+    height: 56px;
+    padding: 0 16px;
+    padding-left: calc(60px + var(--safe-left));
+  }
+  
+  .topbar-title {
+    font-size: 16px;
+    max-width: 60%;
+  }
+  
+  .topbar-actions {
+    gap: 6px;
+  }
+  
+  .btn {
+    padding: 9px 14px;
+    font-size: 12px;
+    min-height: 38px;
+  }
+  
+  .btn-sm {
+    padding: 7px 12px;
+    font-size: 11px;
+    min-height: 34px;
+  }
+  
+  .panel {
+    padding: 12px;
+    padding-top: calc(12px + var(--safe-top));
+    padding-bottom: calc(12px + var(--safe-bottom));
+  }
+  
+  .card-header {
+    padding: 14px 16px;
+  }
+  
+  .card-body {
+    padding: 16px;
+  }
+  
+  .card-title {
+    font-size: 14px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 11px 12px;
+    font-size: 14px;
+    min-height: 42px;
+  }
+  
+  .form-group label {
+    font-size: 10px;
+  }
+  
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  
+  .form-actions .btn {
+    width: 100%;
+  }
+  
+  table {
+    font-size: 13px;
+    min-width: 500px;
+  }
+  
+  thead th {
+    padding: 10px 12px;
+    font-size: 9px;
+  }
+  
+  tbody td {
+    padding: 12px 12px;
+    font-size: 13px;
+  }
+  
+  .cell-reg {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+  
+  .cell-driver {
+    gap: 8px;
+  }
+  
+  .avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+  
+  .driver-name {
+    font-size: 13px;
+    max-width: 100px;
+  }
+  
+  .badge {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+  
+  .notes-tag {
+    max-width: 120px;
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+  
+  .tab-strip {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .tab-btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+  
+  .modal-box {
+    padding: 24px 20px;
+    border-radius: var(--radius-lg);
+  }
+  
+  .modal-title {
+    font-size: 17px;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .modal-actions .btn {
+    min-width: auto;
+  }
+  
+  .toast {
+    padding: 11px 16px;
+    font-size: 13px;
+  }
+  
+  .sidebar-toggle {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    top: calc(12px + var(--safe-top));
+    left: calc(12px + var(--safe-left));
+  }
+  
+  .sidebar {
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .nav-item {
+    padding: 14px 20px;
+    font-size: 15px;
+    min-height: 48px;
+  }
+  
+  .nav-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  
+  .brand {
+    padding: 0 20px 24px;
+  }
+  
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+  
+  .brand h1 {
+    font-size: 18px;
+  }
+  
+  .sidebar-footer {
+    padding: 16px 20px 0;
+  }
+  
+  /* Dashboard grid on mobile */
+  .main > .panel:first-child > div:last-child {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Admin grid on mobile */
+  #panel-admin > div:first-child {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Fuel stats grid removed, but keeping pattern for other grids */
+  .fuel-quick-grid,
+  [style*="grid-template-columns:repeat(3"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  [style*="grid-template-columns:1fr 1.6fr"],
+  [style*="grid-template-columns:1.4fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .sidebar {
+    max-height: 100vh;
+  }
+  
+  .modal-box {
+    max-height: 80vh;
+  }
+  
+  .toast-container {
+    bottom: calc(10px + var(--safe-bottom));
+  }
+}
+
+/* Touch optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn, .nav-item, .tab-btn, .sidebar-toggle {
+    min-height: 48px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    min-height: 48px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  input[type="datetime-local"] {
+    font-size: 16px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .sidebar, .topbar, .btn, .form-actions, .action-cell {
+    display: none !important;
+  }
+  
+  .app-shell {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .panel {
+    display: block !important;
+    padding: 0;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+  
+  table {
+    font-size: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- Mobile sidebar toggle button -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">☰</button>
+
+<div class="app-shell">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🚗</div>
+      <h1>FleetTrack</h1>
+      <p>FNB Fleet Management</p>
+    </div>
+
+    <span class="nav-section-label">Operations</span>
+    <button class="nav-item active" data-panel="dashboard" onclick="switchPanel('dashboard', this); closeMobileSidebar()">
+      <span class="nav-icon">📊</span>
+      Dashboard
+    </button>
+    <button class="nav-item" data-panel="checkout" onclick="switchPanel('checkout', this); closeMobileSidebar()">
+      <span class="nav-icon">🚗</span>
+      Check Out
+    </button>
+    <button class="nav-item" data-panel="checkin" onclick="switchPanel('checkin', this); closeMobileSidebar()">
+      <span class="nav-icon">🏠</span>
+      Check In
+    </button>
+
+    <span class="nav-section-label" style="margin-top:16px">Records</span>
+    <button class="nav-item" data-panel="active-vehicles" onclick="switchPanel('active-vehicles', this); closeMobileSidebar()">
+      <span class="nav-icon">📍</span>
+      Active Vehicles
+      <span class="nav-badge" id="sidebarOutCount">0</span>
+    </button>
+    <button class="nav-item" data-panel="trip-history" onclick="switchPanel('trip-history', this); closeMobileSidebar()">
+      <span class="nav-icon">📋</span>
+      Trip History
+    </button>
+
+    <span class="nav-section-label" style="margin-top:16px">Admin</span>
+    <button class="nav-item" data-panel="admin" onclick="switchPanel('admin', this); closeMobileSidebar()">
+      <span class="nav-icon">⚙️</span>
+      Admin & Export
+    </button>
+
+    <div class="sidebar-footer">
+      <p><span class="status-dot"></span>Connected to Cloud</p>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="topbarTitle">Dashboard</span>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost btn-sm" onclick="loadData()" aria-label="Refresh">↻</button>
+        <button class="btn btn-primary btn-sm" onclick="switchPanel('checkout', document.querySelector('[data-panel=checkout]')); closeMobileSidebar()">+ Check Out</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="alert-bar" id="cleanupAlert">
+        ⚠️ <span id="cleanupAlertText"></span>
+        <button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="switchPanel('admin', document.querySelector('[data-panel=admin]')); closeMobileSidebar()">View Admin →</button>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card rose">
+          <span class="stat-icon">🚗</span>
+          <div class="stat-value" id="statOut">0</div>
+          <div class="stat-label">Currently Out</div>
+          <span class="stat-change neutral" id="statOutChange">Today</span>
+        </div>
+        <div class="stat-card emerald">
+          <span class="stat-icon">✅</span>
+          <div class="stat-value" id="statCompleted">0</div>
+          <div class="stat-label">Trips Today</div>
+          <span class="stat-change up" id="statCompletedChange">+0 this week</span>
+        </div>
+        <div class="stat-card blue">
+          <span class="stat-icon">⏱</span>
+          <div class="stat-value" id="statAvgDuration">—</div>
+          <div class="stat-label">Avg Trip Duration</div>
+          <span class="stat-change neutral">Completed trips</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px;">
+        <!-- Active Vehicles Card -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🚗 Vehicles Currently Out</span>
+            <button class="btn btn-ghost btn-sm" onclick="switchPanel('active-vehicles', document.querySelector('[data-panel=active-vehicles]')); closeMobileSidebar()">View All</button>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Registration</th>
+                  <th>Driver</th>
+                  <th>Since</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody id="dashOutBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Trips -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">📋 Recent Trips</span>
+            <button class="btn btn-ghost btn-sm" onclick="switchPanel('trip-history', document.querySelector('[data-panel=trip-history]')); closeMobileSidebar()">View All</button>
+          </div>
+          <div id="dashRecentBody" style="padding: 0 16px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECK OUT -->
+    <div class="panel" id="panel-checkout">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🚗 Vehicle Check Out</span>
+        </div>
+        <div class="card-body">
+          <form id="vehicleOutForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Vehicle Registration *</label>
+                <input type="text" id="cardRegistrationOut" placeholder="e.g. CA 123-456" required autocapitalize="characters" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Driver Name *</label>
+                <input type="text" id="driverNameOut" placeholder="Full name" required autocomplete="name">
+              </div>
+            </div>
+            <div class="form-row one">
+              <div class="form-group">
+                <label>Date & Time Out *</label>
+                <input type="datetime-local" id="dateTimeOut" required>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" onclick="document.getElementById('vehicleOutForm').reset()">Clear</button>
+              <button type="submit" class="btn btn-primary">🚗 Check Out Vehicle</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHECK IN -->
+    <div class="panel" id="panel-checkin">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">🏠 Vehicle Check In</span>
+        </div>
+        <div class="card-body">
+          <form id="vehicleInForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Select Vehicle *</label>
+                <select id="cardRegistrationIn" required>
+                  <option value="">— Choose checked-out vehicle —</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Driver</label>
+                <input type="text" id="driverNameIn" readonly placeholder="Auto-filled">
+              </div>
+            </div>
+            <div class="form-row one">
+              <div class="form-group">
+                <label>Date & Time In *</label>
+                <input type="datetime-local" id="dateTimeIn" required>
+              </div>
+            </div>
+            <div class="form-row one">
+              <div class="form-group">
+                <label>Trip Notes</label>
+                <textarea id="tripNotes" placeholder="Any issues, incidents, or notes about this trip..."></textarea>
+              </div>
+            </div>
+            <div id="checkinPreview" style="display:none;">
+              <p style="font-size:12px; color:var(--navy-400); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Trip Summary</p>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div><span style="font-size:11px;color:var(--navy-400)">Out</span><br><strong id="previewOut" style="font-size:13px;">—</strong></div>
+                <div><span style="font-size:11px;color:var(--navy-400)">Duration</span><br><strong id="previewDuration" style="font-size:13px;">—</strong></div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-ghost" onclick="resetCheckinForm()">Clear</button>
+              <button type="submit" class="btn btn-success">🏠 Check In Vehicle</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE VEHICLES -->
+    <div class="panel" id="panel-active-vehicles">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">📍 Vehicles Currently Out</span>
+          <input type="text" class="search-input" id="searchActive" placeholder="Search..." oninput="renderActiveVehicles()">
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Registration</th>
+                <th>Driver</th>
+                <th>Checked Out</th>
+                <th>Duration</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="activeVehiclesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRIP HISTORY -->
+    <div class="panel" id="panel-trip-history">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+        <div class="tab-strip">
+          <button class="tab-btn active" onclick="switchHistoryTab('today', this)">Today</button>
+          <button class="tab-btn" onclick="switchHistoryTab('week', this)">This Week</button>
+          <button class="tab-btn" onclick="switchHistoryTab('month', this)">This Month</button>
+          <button class="tab-btn" onclick="switchHistoryTab('all', this)">All Time</button>
+        </div>
+        <input type="text" class="search-input" id="searchHistory" placeholder="Search trips..." oninput="renderTripHistory()">
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Registration</th>
+                <th>Driver</th>
+                <th>Out</th>
+                <th>In</th>
+                <th>Duration</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="tripHistoryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="panel" id="panel-admin">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div class="card">
+          <div class="card-header"><span class="card-title">📤 Export Data</span></div>
+          <div class="card-body">
+            <p style="font-size:14px;color:var(--navy-600);margin-bottom:20px;">Export your fleet records as CSV for use in Excel or other tools.</p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <button class="btn btn-ghost" onclick="exportLifeToDate()">📅 Export Life-to-Date</button>
+              <button class="btn btn-ghost" onclick="exportMonthToDate()">📆 Export Month-to-Date</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">🔐 Admin Actions</span></div>
+          <div class="card-body">
+            <p style="font-size:14px;color:var(--navy-600);margin-bottom:20px;">Destructive actions require admin password to confirm.</p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <button class="btn btn-ghost" onclick="requireAdmin(cleanupOldData)">🧹 Cleanup Old Records</button>
+              <button class="btn btn-danger btn-sm" onclick="requireAdmin(clearCompleted)" style="justify-content:center;">🗑 Clear Completed Trips</button>
+              <button class="btn btn-danger btn-sm" onclick="requireAdmin(clearAll)" style="justify-content:center;">⚠️ Clear All Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;" id="adminStatsCard">
+        <div class="card-header">
+          <span class="card-title">📊 Full Statistics</span>
+          <button class="btn btn-ghost btn-sm" onclick="requireAdmin(showFullStats)">Unlock Stats</button>
+        </div>
+        <div id="adminStatsBody" style="padding:24px;">
+          <p style="font-size:14px;color:var(--navy-400);text-align:center;">Admin access required to view statistics.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Admin Modal -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal-box">
+    <div class="modal-title">🔐 Admin Access</div>
+    <div class="modal-subtitle">Enter your admin password to continue.</div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="adminPassword" placeholder="••••••••" autocomplete="off" autocapitalize="none">
+    </div>
+    <div class="error-msg" id="adminError">Incorrect password. Try again.</div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeAdminModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAdmin()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, writeBatch } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDKpWycZRpAS7uFKfZaQ-un8ojGclndvSU",
+  authDomain: "fnb-fleet-93b54.firebaseapp.com",
+  projectId: "fnb-fleet-93b54",
+  storageBucket: "fnb-fleet-93b54.firebasestorage.app",
+  messagingSenderId: "827624569947",
+  appId: "1:827624569947:web:dc7f6f555435d09e76937e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ——— State ———
+let allOut = [], allCompleted = [];
+let currentHistoryFilter = 'today';
+let adminCallback = null;
+const ADMIN_PASS = "Superb@786";
+
+// ——— Utils ———
+function fmt(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleString('en-ZA', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function fmtDate(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleString('en-ZA', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function calcDuration(out, inTime) {
+  if (!out || !inTime) return '—';
+  const ms = new Date(inTime) - new Date(out);
+  if (ms <= 0) return '—';
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+function liveDuration(out) {
+  const ms = Date.now() - new Date(out).getTime();
+  if (ms <= 0) return '0m';
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+function avatarInitials(name) {
+  if (!name) return '?';
+  const parts = name.trim().split(' ');
+  return parts.length >= 2 ? parts[0][0] + parts[parts.length-1][0] : parts[0].slice(0,2);
+}
+
+const avatarColors = ['avatar-gold','avatar-blue','avatar-emerald','avatar-rose'];
+function avatarColor(name) {
+  let sum = 0;
+  for (const c of (name||'')) sum += c.charCodeAt(0);
+  return avatarColors[sum % 4];
+}
+
+function startOfDay() {
+  const d = new Date(); d.setHours(0,0,0,0); return d;
+}
+
+function startOfWeek() {
+  const d = new Date(); d.setHours(0,0,0,0);
+  d.setDate(d.getDate() - d.getDay()); return d;
+}
+
+function startOfMonth() {
+  const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+function isOnOrAfter(dateStr, ref) {
+  return new Date(dateStr) >= ref;
+}
+
+// ——— Toast ———
+function toast(msg, type='info') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${type==='success'?'✓':type==='error'?'✕':'ℹ'}</span>${msg}`;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ——— Load Data ———
+async function loadData() {
+  try {
+    const [outSnap, inSnap] = await Promise.all([
+      getDocs(collection(db, 'outRecords')),
+      getDocs(collection(db, 'completedRecords'))
+    ]);
+    allOut = outSnap.docs.map(d => ({id:d.id,...d.data()}));
+    allCompleted = inSnap.docs.map(d => ({id:d.id,...d.data()}));
+    renderAll();
+  } catch(e) {
+    console.error(e);
+    toast('Failed to load data from cloud.', 'error');
+  }
+}
+window.loadData = loadData;
+
+function renderAll() {
+  renderDashboard();
+  renderActiveVehicles();
+  renderTripHistory();
+  updateCheckinDropdown();
+  updateSidebarBadge();
+  checkCleanupAlert();
+}
+
+function updateSidebarBadge() {
+  document.getElementById('sidebarOutCount').textContent = allOut.length;
+}
+
+function checkCleanupAlert() {
+  const oldOut = allOut.filter(r => !isOnOrAfter(r.dateTimeOut, startOfDay())).length;
+  const oldIn = allCompleted.filter(r => !isOnOrAfter(r.dateTimeIn, startOfDay()) && !isOnOrAfter(r.dateTimeOut, startOfDay())).length;
+  const bar = document.getElementById('cleanupAlert');
+  if (oldOut > 0 || oldIn > 0) {
+    bar.classList.add('show');
+    document.getElementById('cleanupAlertText').textContent = `${oldOut + oldIn} old records hidden (before today). Use Admin to clean up.`;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+// ——— Dashboard ———
+function renderDashboard() {
+  const todayOut = allOut.filter(r => isOnOrAfter(r.dateTimeOut, startOfDay()));
+  const todayCompleted = allCompleted.filter(r => isOnOrAfter(r.dateTimeIn, startOfDay()));
+  const weekCompleted = allCompleted.filter(r => isOnOrAfter(r.dateTimeIn, startOfWeek()));
+
+  document.getElementById('statOut').textContent = allOut.length;
+  document.getElementById('statCompleted').textContent = todayCompleted.length;
+  document.getElementById('statCompletedChange').textContent = `+${weekCompleted.length} this week`;
+
+  // Avg duration
+  const durs = allCompleted.filter(r => r.dateTimeIn && r.dateTimeOut).map(r => new Date(r.dateTimeIn) - new Date(r.dateTimeOut)).filter(d => d > 0);
+  if (durs.length > 0) {
+    const avg = durs.reduce((a,b)=>a+b,0)/durs.length;
+    const h = Math.floor(avg/3600000), m = Math.floor((avg%3600000)/60000);
+    document.getElementById('statAvgDuration').textContent = h > 0 ? `${h}h${m}m` : `${m}m`;
+  }
+
+  // Active table
+  const outBody = document.getElementById('dashOutBody');
+  outBody.innerHTML = '';
+  if (allOut.length === 0) {
+    outBody.innerHTML = '<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">🏁</div><p>All vehicles are in</p></div></td></tr>';
+  } else {
+    allOut.slice(0,6).forEach(r => {
+      outBody.innerHTML += `<tr>
+        <td><span class="cell-reg">${r.cardRegistration}</span></td>
+        <td><div class="cell-driver"><div class="avatar ${avatarColor(r.driverName)}">${avatarInitials(r.driverName)}</div><span class="driver-name">${r.driverName}</span></div></td>
+        <td style="font-size:13px;color:var(--navy-400)">${fmt(r.dateTimeOut)}</td>
+        <td><span class="duration-pill">${liveDuration(r.dateTimeOut)}</span></td>
+      </tr>`;
+    });
+  }
+
+  // Recent trips
+  const recentBody = document.getElementById('dashRecentBody');
+  recentBody.innerHTML = '';
+  const recent = [...allCompleted].sort((a,b) => new Date(b.dateTimeIn)-new Date(a.dateTimeIn)).slice(0,6);
+  if (recent.length === 0) {
+    recentBody.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>No completed trips yet</p></div>';
+  } else {
+    recent.forEach(r => {
+      recentBody.innerHTML += `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--navy-100);">
+        <div class="avatar ${avatarColor(r.driverName)}" style="width:28px;height:28px;font-size:10px">${avatarInitials(r.driverName)}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="cell-reg" style="font-size:11px">${r.cardRegistration}</span>
+            <span style="font-size:12px;color:var(--navy-600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.driverName}</span>
+          </div>
+          <div style="font-size:11px;color:var(--navy-400);margin-top:2px">${fmtDate(r.dateTimeIn)}</div>
+        </div>
+        <span class="badge badge-in" style="font-size:10px">In</span>
+      </div>`;
+    });
+  }
+}
+
+// ——— Active Vehicles ———
+function renderActiveVehicles() {
+  const search = (document.getElementById('searchActive')?.value||'').toLowerCase();
+  const body = document.getElementById('activeVehiclesBody');
+  const filtered = allOut.filter(r =>
+    !search || r.cardRegistration.toLowerCase().includes(search) || r.driverName.toLowerCase().includes(search)
+  );
+  body.innerHTML = '';
+  if (filtered.length === 0) {
+    body.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">🏁</div><p>${search?'No matches found':'All vehicles are currently checked in'}</p></div></td></tr>`;
+    return;
+  }
+  filtered.forEach(r => {
+    body.innerHTML += `<tr>
+      <td><span class="cell-reg">${r.cardRegistration}</span></td>
+      <td><div class="cell-driver"><div class="avatar ${avatarColor(r.driverName)}">${avatarInitials(r.driverName)}</div><span class="driver-name">${r.driverName}</span></div></td>
+      <td style="font-size:13px;color:var(--navy-600)">${fmt(r.dateTimeOut)}</td>
+      <td><span class="duration-pill">${liveDuration(r.dateTimeOut)}</span></td>
+      <td><div class="action-cell">
+        <button class="btn btn-success btn-sm" onclick="quickCheckin('${r.cardRegistration}')">Check In</button>
+      </div></td>
+    </tr>`;
+  });
+}
+window.renderActiveVehicles = renderActiveVehicles;
+
+function quickCheckin(reg) {
+  switchPanel('checkin', document.querySelector('[data-panel=checkin]'));
+  closeMobileSidebar();
+  setTimeout(() => {
+    document.getElementById('cardRegistrationIn').value = reg;
+    document.getElementById('cardRegistrationIn').dispatchEvent(new Event('change'));
+  }, 100);
+}
+window.quickCheckin = quickCheckin;
+
+// ——— Trip History ———
+function switchHistoryTab(filter, btn) {
+  currentHistoryFilter = filter;
+  document.querySelectorAll('#panel-trip-history .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTripHistory();
+}
+window.switchHistoryTab = switchHistoryTab;
+
+function renderTripHistory() {
+  const search = (document.getElementById('searchHistory')?.value||'').toLowerCase();
+  const now = new Date();
+  let ref;
+  if (currentHistoryFilter === 'today') ref = startOfDay();
+  else if (currentHistoryFilter === 'week') ref = startOfWeek();
+  else if (currentHistoryFilter === 'month') ref = startOfMonth();
+  else ref = new Date(0);
+
+  const body = document.getElementById('tripHistoryBody');
+  const filtered = [...allCompleted]
+    .filter(r => isOnOrAfter(r.dateTimeIn, ref))
+    .filter(r => !search || r.cardRegistration.toLowerCase().includes(search) || r.driverName.toLowerCase().includes(search))
+    .sort((a,b) => new Date(b.dateTimeIn)-new Date(a.dateTimeIn));
+
+  body.innerHTML = '';
+  if (filtered.length === 0) {
+    body.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📋</div><p>No trips found for this period</p></div></td></tr>`;
+    return;
+  }
+  filtered.forEach(r => {
+    body.innerHTML += `<tr>
+      <td><span class="cell-reg">${r.cardRegistration}</span></td>
+      <td><div class="cell-driver"><div class="avatar ${avatarColor(r.driverName)}">${avatarInitials(r.driverName)}</div><span class="driver-name">${r.driverName}</span></div></td>
+      <td style="font-size:13px;color:var(--navy-600)">${fmt(r.dateTimeOut)}</td>
+      <td style="font-size:13px;color:var(--navy-600)">${fmt(r.dateTimeIn)}</td>
+      <td><span class="duration-pill">${calcDuration(r.dateTimeOut, r.dateTimeIn)}</span></td>
+      <td>${r.tripNotes?`<span class="notes-tag" title="${r.tripNotes}">${r.tripNotes}</span>`:'<span style="color:var(--navy-400);font-size:12px">—</span>'}</td>
+    </tr>`;
+  });
+}
+window.renderTripHistory = renderTripHistory;
+
+// ——— Checkin Dropdown ———
+function updateCheckinDropdown() {
+  const sel = document.getElementById('cardRegistrationIn');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Choose checked-out vehicle —</option>';
+  allOut.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r.cardRegistration;
+    o.textContent = `${r.cardRegistration} — ${r.driverName}`;
+    sel.appendChild(o);
+  });
+  if (current) sel.value = current;
+}
+
+// ——— Panel Switching ———
+function switchPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  const titles = { dashboard:'Dashboard', checkout:'Check Out Vehicle', checkin:'Check In Vehicle', 'active-vehicles':'Active Vehicles', 'trip-history':'Trip History', admin:'Admin & Export' };
+  document.getElementById('topbarTitle').textContent = titles[name] || name;
+  
+  // Scroll to top on panel change (mobile)
+  if (window.innerWidth <= 1024) {
+    document.querySelector('.main')?.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+window.switchPanel = switchPanel;
+
+// ——— Mobile Sidebar ———
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+  document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+}
+window.toggleSidebar = toggleSidebar;
+
+function closeMobileSidebar() {
+  if (window.innerWidth <= 1024) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+window.closeMobileSidebar = closeMobileSidebar;
+
+// Close sidebar on resize if open
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 1024) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+// ——— Forms ———
+document.getElementById('vehicleOutForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const reg = document.getElementById('cardRegistrationOut').value.trim().toUpperCase();
+  if (allOut.some(r => r.cardRegistration === reg)) {
+    toast('Vehicle already checked out!', 'error'); return;
+  }
+  const record = {
+    cardRegistration: reg,
+    driverName: document.getElementById('driverNameOut').value.trim(),
+    dateTimeOut: document.getElementById('dateTimeOut').value,
+    timestamp: new Date().toISOString()
+  };
+  try {
+    const docRef = await addDoc(collection(db, 'outRecords'), record);
+    allOut.push({id: docRef.id, ...record});
+    renderAll();
+    this.reset();
+    setNow('dateTimeOut');
+    toast('Vehicle checked out successfully!', 'success');
+  } catch(err) {
+    toast('Failed to save. Check connection.', 'error');
+  }
+});
+
+document.getElementById('vehicleInForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const reg = document.getElementById('cardRegistrationIn').value;
+  const outRecord = allOut.find(r => r.cardRegistration === reg);
+  if (!outRecord) { toast('No checkout found!', 'error'); return; }
+  const dateTimeIn = document.getElementById('dateTimeIn').value;
+  if (new Date(dateTimeIn) <= new Date(outRecord.dateTimeOut)) {
+    toast('Check-in time must be after check-out time!', 'error'); return;
+  }
+  const completed = {
+    ...outRecord,
+    dateTimeIn,
+    tripNotes: document.getElementById('tripNotes').value.trim(),
+    completedTimestamp: new Date().toISOString()
+  };
+  try {
+    await deleteDoc(doc(db, 'outRecords', outRecord.id));
+    await addDoc(collection(db, 'completedRecords'), completed);
+    allOut = allOut.filter(r => r.cardRegistration !== reg);
+    allCompleted.push(completed);
+    renderAll();
+    resetCheckinForm();
+    setNow('dateTimeIn');
+    toast('Vehicle checked in successfully!', 'success');
+  } catch(err) {
+    toast('Failed to save. Check connection.', 'error');
+  }
+});
+
+document.getElementById('cardRegistrationIn').addEventListener('change', function() {
+  const r = allOut.find(r => r.cardRegistration === this.value);
+  document.getElementById('driverNameIn').value = r ? r.driverName : '';
+  updateCheckinPreview();
+});
+
+document.getElementById('dateTimeIn').addEventListener('change', updateCheckinPreview);
+
+function updateCheckinPreview() {
+  const reg = document.getElementById('cardRegistrationIn').value;
+  const inTime = document.getElementById('dateTimeIn').value;
+  const outRecord = allOut.find(r => r.cardRegistration === reg);
+  const preview = document.getElementById('checkinPreview');
+  if (outRecord && inTime) {
+    preview.style.display = 'block';
+    document.getElementById('previewOut').textContent = fmt(outRecord.dateTimeOut);
+    document.getElementById('previewDuration').textContent = calcDuration(outRecord.dateTimeOut, inTime);
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function resetCheckinForm() {
+  document.getElementById('vehicleInForm').reset();
+  document.getElementById('driverNameIn').value = '';
+  document.getElementById('checkinPreview').style.display = 'none';
+}
+window.resetCheckinForm = resetCheckinForm;
+
+// ——— Admin Modal ———
+function requireAdmin(callback) {
+  adminCallback = callback;
+  document.getElementById('adminModal').classList.add('open');
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('adminError').classList.remove('show');
+  setTimeout(()=>document.getElementById('adminPassword').focus(), 100);
+}
+window.requireAdmin = requireAdmin;
+
+function closeAdminModal() {
+  document.getElementById('adminModal').classList.remove('open');
+  adminCallback = null;
+}
+window.closeAdminModal = closeAdminModal;
+
+function confirmAdmin() {
+  const pass = document.getElementById('adminPassword').value;
+  if (pass === ADMIN_PASS) {
+    closeAdminModal();
+    if (adminCallback) adminCallback();
+  } else {
+    document.getElementById('adminError').classList.add('show');
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPassword').focus();
+  }
+}
+window.confirmAdmin = confirmAdmin;
+
+document.getElementById('adminPassword').addEventListener('keydown', e => { if (e.key==='Enter') confirmAdmin(); });
+document.getElementById('adminModal').addEventListener('click', e => { if (e.target.id==='adminModal') closeAdminModal(); });
+
+// ——— Admin Actions ———
+async function clearAll() {
+  if (!confirm('Clear ALL data? This cannot be undone.')) return;
+  const outSnap = await getDocs(collection(db, 'outRecords'));
+  const inSnap = await getDocs(collection(db, 'completedRecords'));
+  await Promise.all([...outSnap.docs, ...inSnap.docs].map(d => deleteDoc(d.ref)));
+  allOut = []; allCompleted = [];
+  renderAll();
+  toast('All records cleared.', 'success');
+}
+window.clearAll = clearAll;
+
+async function clearCompleted() {
+  if (!confirm('Clear all completed trips? Currently checked-out vehicles will remain.')) return;
+  const batch = writeBatch(db);
+  const snap = await getDocs(collection(db, 'completedRecords'));
+  snap.docs.forEach(d => batch.delete(d.ref));
+  if (!snap.empty) await batch.commit();
+  allCompleted = [];
+  renderAll();
+  toast('Completed trips cleared.', 'success');
+}
+window.clearCompleted = clearCompleted;
+
+async function cleanupOldData() {
+  const oldOut = allOut.filter(r => !isOnOrAfter(r.dateTimeOut, startOfDay())).length;
+  const oldIn = allCompleted.filter(r => !isOnOrAfter(r.dateTimeIn, startOfDay()) && !isOnOrAfter(r.dateTimeOut, startOfDay())).length;
+  const total = oldOut + oldIn;
+  if (total === 0) { toast('No old records to clean up!', 'info'); return; }
+  if (!confirm(`Delete ${total} record(s) from before today?\n${oldOut} checkout(s) + ${oldIn} trip(s)`)) return;
+  const batch = writeBatch(db);
+  const oSnap = await getDocs(collection(db, 'outRecords'));
+  const iSnap = await getDocs(collection(db, 'completedRecords'));
+  oSnap.docs.forEach(d => { if (!isOnOrAfter(d.data().dateTimeOut, startOfDay())) batch.delete(d.ref); });
+  iSnap.docs.forEach(d => { const data = d.data(); if (!isOnOrAfter(data.dateTimeIn, startOfDay()) && !isOnOrAfter(data.dateTimeOut, startOfDay())) batch.delete(d.ref); });
+  await batch.commit();
+  await loadData();
+  toast(`Removed ${total} old records.`, 'success');
+}
+window.cleanupOldData = cleanupOldData;
+
+function showFullStats() {
+  const body = document.getElementById('adminStatsBody');
+  const totalTrips = allCompleted.length;
+  const totalOut = allOut.length;
+  const durs = allCompleted.filter(r=>r.dateTimeIn&&r.dateTimeOut).map(r=>new Date(r.dateTimeIn)-new Date(r.dateTimeOut)).filter(d=>d>0);
+  const avgMs = durs.length ? durs.reduce((a,b)=>a+b)/durs.length : 0;
+  const avgH = Math.floor(avgMs/3600000), avgM = Math.floor((avgMs%3600000)/60000);
+  const driverMap = {};
+  allCompleted.forEach(r => driverMap[r.driverName] = (driverMap[r.driverName]||0)+1);
+  const topDriver = Object.entries(driverMap).sort((a,b)=>b[1]-a[1])[0];
+  body.innerHTML = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+    <div class="fuel-stat"><div class="fuel-stat-val">${totalOut}</div><div class="fuel-stat-lbl">Vehicles Out</div></div>
+    <div class="fuel-stat"><div class="fuel-stat-val">${totalTrips}</div><div class="fuel-stat-lbl">Total Trips</div></div>
+    <div class="fuel-stat"><div class="fuel-stat-val">${durs.length?`${avgH}h${avgM}m`:'—'}</div><div class="fuel-stat-lbl">Avg Duration</div></div>
+    <div class="fuel-stat"><div class="fuel-stat-val">${topDriver?topDriver[0]:'—'}</div><div class="fuel-stat-lbl">Top Driver${topDriver?` (${topDriver[1]})`:''}  </div></div>
+  </div>`;
+}
+window.showFullStats = showFullStats;
+
+// ——— CSV Export ———
+function downloadCSV(content, filename) {
+  const blob = new Blob([content], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+function exportLifeToDate() {
+  let csv = 'Vehicle Reg,Driver,Status,Date Out,Date In,Duration,Purpose,Notes\n';
+  const all = [
+    ...allOut.map(r=>({...r, status:'OUT', dateTimeIn:''})),
+    ...allCompleted.map(r=>({...r, status:'COMPLETED'}))
+  ].sort((a,b)=>new Date(b.dateTimeOut)-new Date(a.dateTimeOut));
+  all.forEach(r => {
+    csv += `"${r.cardRegistration}","${r.driverName}","${r.status}","${fmt(r.dateTimeOut)}","${r.status==='COMPLETED'?fmt(r.dateTimeIn):'N/A'}","${calcDuration(r.dateTimeOut,r.dateTimeIn)}","${r.purpose||''}","${r.tripNotes||''}"\n`;
+  });
+  downloadCSV(csv, 'fleet_life_to_date.csv');
+  toast('Export downloaded!', 'success');
+}
+window.exportLifeToDate = exportLifeToDate;
+
+function exportMonthToDate() {
+  const now = new Date();
+  const month = now.getMonth(), year = now.getFullYear();
+  const monthName = now.toLocaleString('default',{month:'long'});
+  const filter = r => { const d = new Date(r.dateTimeIn||r.dateTimeOut); return d.getMonth()===month&&d.getFullYear()===year; };
+  let csv = 'Vehicle Reg,Driver,Status,Date Out,Date In,Duration,Purpose,Notes\n';
+  [...allOut.filter(filter).map(r=>({...r,status:'OUT',dateTimeIn:''})), ...allCompleted.filter(filter).map(r=>({...r,status:'COMPLETED'}))]
+    .sort((a,b)=>new Date(b.dateTimeOut)-new Date(a.dateTimeOut))
+    .forEach(r => {
+      csv += `"${r.cardRegistration}","${r.driverName}","${r.status}","${fmt(r.dateTimeOut)}","${r.status==='COMPLETED'?fmt(r.dateTimeIn):'N/A'}","${calcDuration(r.dateTimeOut,r.dateTimeIn)}","${r.purpose||''}","${r.tripNotes||''}"\n`;
+    });
+  downloadCSV(csv, `fleet_${monthName}_${year}.csv`);
+  toast('Month-to-date export downloaded!', 'success');
+}
+window.exportMonthToDate = exportMonthToDate;
+
+// ——— Helpers ———
+function setNow(id) {
+  const now = new Date();
+  now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+  document.getElementById(id).value = now.toISOString().slice(0,16);
+}
+
+// ——— Init ———
+document.addEventListener('DOMContentLoaded', async () => {
+  setNow('dateTimeOut');
+  setNow('dateTimeIn');
+  await loadData();
+
+  // Live duration update every minute
+  setInterval(() => {
+    document.querySelectorAll('#activeVehiclesBody .duration-pill, #dashOutBody .duration-pill').forEach(el => {
+      const row = el.closest('tr');
+      if (!row) return;
+      const regCell = row.querySelector('.cell-reg');
+      if (!regCell) return;
+      const reg = regCell.textContent;
+      const r = allOut.find(r => r.cardRegistration === reg);
+      if (r) el.textContent = liveDuration(r.dateTimeOut);
+    });
+  }, 60000);
+
+  // Prevent zoom on double-tap (iOS)
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', (event) => {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, { passive: false });
+
+  if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  }
+});
+</script>
+</body>
+</html>
